@@ -1,17 +1,15 @@
 variable "nic" {
   
 }
-
-variable "location" {
-  
-}
-
 variable "resource_group_name" {
   
 }
 
-variable "subnet_id" {
+
+variable "vnet_name" {
   
 }
 
-
+variable "subnet_name" {
+  
+}

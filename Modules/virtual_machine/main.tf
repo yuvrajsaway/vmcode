@@ -7,9 +7,11 @@ resource "azurerm_linux_virtual_machine" "virtaul_machine" {
   admin_username                  = "adminuser"
   admin_password                  = "P@$$w0rd@123"
   disable_password_authentication = false
-  network_interface_ids = [
-    azurerm_network_interface.fornt_nic.id,
-  ]
+ network_interface_ids = var.network_interface_ids
+ 
+  # network_interface_ids = [
+  #   azurerm_network_interface.frontendnic.id,
+  # ]
 
   #   admin_ssh_key {
   #     username   = "adminuser"
@@ -37,3 +39,5 @@ systemctl start nginx
 EOF
   )
 }
+
+
