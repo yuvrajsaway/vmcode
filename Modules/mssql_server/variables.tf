@@ -1,4 +1,4 @@
-variable "azurerm_public_ip" {
+variable "mssql_name" {
   
 }
 

@@ -13,3 +13,4 @@ variable "vnet_name" {
 variable "subnet_name" {
   
 }
+ 

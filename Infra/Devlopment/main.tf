@@ -5,6 +5,14 @@ module "resource_group" {
   location            = "east us"
 }
 
+module "azurerm_public_ip" {
+  depends_on = [ module.resource_group ]
+  source = "../../Modules/public_ip"
+
+  azurerm_public_ip = "publicip001"
+  resource_group_name = "yuvrajrg001"
+}
+
 module "azurerm_virtual_network" {
   depends_on = [module.resource_group]
   source     = "../../Modules/Vnet"
@@ -41,6 +49,7 @@ module "network_interface_frontend" {
   vnet_name           = "yuvivnet001"
   resource_group_name = "yuvrajrg001"
 
+ 
 }
 
 module "network_interface_backend" {
@@ -53,14 +62,17 @@ module "network_interface_backend" {
 
 }
 
+
+
+
+
 module "virtual_machine_frontend" {
   depends_on = [module.network_interface_frontend]
   source     = "../../Modules/virtual_machine"
 
   virtual_machine_name = "frontend_machine"
   resource_group_name  = "yuvrajrg001"
-  location             = "east us"
-  network_interface_ids = module.network_interface_frontend.id
+  network_interface_ids = [module.network_interface_frontend.id]
 
 
 }
@@ -71,12 +83,23 @@ module "virtual_machine_backend" {
 
   virtual_machine_name = "backend_machine"
   resource_group_name  = "yuvrajrg001"
-  location             = "east us"
-  network_interface_ids = module.network_interface_backend.id
+  network_interface_ids = [module.network_interface_backend.id]
 
 
 }
 
 
+module "mssql" {
+  depends_on = [ module.resource_group ]
+  source = "../../Modules/mssql_server"
 
+  mssql_name = "mssqldbserver"
+  resource_group_name = "yuvrajrg001"
+}
 
+module "database" {
+source = "../../Modules/mssql_database"
+
+db_name = "tododb"
+server_id = module.mssql.id
+}
