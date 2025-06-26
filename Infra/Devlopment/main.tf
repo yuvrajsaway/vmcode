@@ -6,10 +6,10 @@ module "resource_group" {
 }
 
 module "azurerm_public_ip" {
-  depends_on = [ module.resource_group ]
-  source = "../../Modules/public_ip"
+  depends_on = [module.resource_group]
+  source     = "../../Modules/public_ip"
 
-  azurerm_public_ip = "publicip001"
+  azurerm_public_ip   = "publicip001"
   resource_group_name = "yuvrajrg001"
 }
 
@@ -48,8 +48,9 @@ module "network_interface_frontend" {
   subnet_name         = "frontendsubnet"
   vnet_name           = "yuvivnet001"
   resource_group_name = "yuvrajrg001"
+  azurerm_public_ip   = "frontendpip"
 
- 
+
 }
 
 module "network_interface_backend" {
@@ -59,6 +60,7 @@ module "network_interface_backend" {
   subnet_name         = "backendsubnet"
   vnet_name           = "yuvivnet001"
   resource_group_name = "yuvrajrg001"
+  azurerm_public_ip   = null
 
 }
 
@@ -70,8 +72,8 @@ module "virtual_machine_frontend" {
   depends_on = [module.network_interface_frontend]
   source     = "../../Modules/virtual_machine"
 
-  virtual_machine_name = "frontend_machine"
-  resource_group_name  = "yuvrajrg001"
+  virtual_machine_name  = "frontend_machine"
+  resource_group_name   = "yuvrajrg001"
   network_interface_ids = [module.network_interface_frontend.id]
 
 
@@ -81,8 +83,8 @@ module "virtual_machine_backend" {
   depends_on = [module.network_interface_backend]
   source     = "../../Modules/virtual_machine"
 
-  virtual_machine_name = "backend_machine"
-  resource_group_name  = "yuvrajrg001"
+  virtual_machine_name  = "backend_machine"
+  resource_group_name   = "yuvrajrg001"
   network_interface_ids = [module.network_interface_backend.id]
 
 
@@ -90,16 +92,16 @@ module "virtual_machine_backend" {
 
 
 module "mssql" {
-  depends_on = [ module.resource_group ]
-  source = "../../Modules/mssql_server"
+  depends_on = [module.resource_group]
+  source     = "../../Modules/mssql_server"
 
-  mssql_name = "mssqldbserver"
+  mssql_name          = "mssqldbserver"
   resource_group_name = "yuvrajrg001"
 }
 
 module "database" {
-source = "../../Modules/mssql_database"
+  source = "../../Modules/mssql_database"
 
-db_name = "tododb"
-server_id = module.mssql.id
+  db_name   = "tododb"
+  server_id = module.mssql.id
 }

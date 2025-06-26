@@ -14,3 +14,6 @@ variable "subnet_name" {
   
 }
  
+ variable "azurerm_public_ip" {
+  
+}

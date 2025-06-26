@@ -7,6 +7,8 @@ resource "azurerm_network_interface" "nic" {
     name                          = "internal"
     subnet_id                     = data.azurerm_subnet.subnet_name.id
     private_ip_address_allocation = "Dynamic"
+    # 👇 Conditionally assign public_ip_address_id
+    public_ip_address_id = var.azurerm_public_ip != null ? var.azurerm_public_ip : null
   }
 }
 

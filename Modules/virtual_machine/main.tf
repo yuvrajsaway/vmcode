@@ -10,9 +10,7 @@ resource "azurerm_linux_virtual_machine" "virtaul_machine" {
   network_interface_ids           = var.network_interface_ids
 
 
-  # network_interface_ids = [
-  #   azurerm_network_interface.frontendnic.id,
-  # ]
+ 
 
   #   admin_ssh_key {
   #     username   = "adminuser"
