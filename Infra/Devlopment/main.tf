@@ -21,7 +21,17 @@ module "azurerm_virtual_network" {
   resource_group_name = "yuvrajrg001"
   address_space       = ["192.168.0.0/22"]
   dns_servers         = ["192.168.0.4", "192.168.0.5"]
+
+  }
+
+module "azurerm_network_security_group" {
+  depends_on          = [module.resource_group]
+  source              = "../../Modules/nsg"
+  nsg_name = "nsg001"
+  resource_group_name = "yuvrajrg001"
+
 }
+
 
 module "frontend_subnet" {
   depends_on          = [module.azurerm_virtual_network]
@@ -40,6 +50,8 @@ module "backend_subnet" {
   vnet_name           = "yuvivnet001"
   address_prefixes    = ["192.168.2.0/24"]
 }
+
+
 
 module "network_interface_frontend" {
   depends_on          = [module.frontend_subnet]
@@ -80,7 +92,7 @@ module "virtual_machine_frontend" {
 }
 
 module "virtual_machine_backend" {
-  depends_on = [module.network_interface_backend,]
+  depends_on = [module.network_interface_backend, ]
   source     = "../../Modules/virtual_machine"
 
   virtual_machine_name  = "backendmachine"
@@ -105,3 +117,4 @@ module "database" {
   db_name   = "tododb"
   server_id = module.mssql.id
 }
+
