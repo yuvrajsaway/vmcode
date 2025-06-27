@@ -8,3 +8,7 @@ resource "azurerm_public_ip" "public_ip" {
 }
 
 
+output "public_ip_id" {
+  value       = azurerm_public_ip.public_ip.id
+  description = "Public IP resource ID"
+}

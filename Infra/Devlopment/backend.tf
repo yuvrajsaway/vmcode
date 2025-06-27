@@ -2,9 +2,9 @@ terraform {
   
 
 backend "azurerm" {
-    resource_group_name  = "yuvrajrg001"
-    storage_account_name = "yuvistorage001"
-    container_name       = "yuvitfstate"
+    resource_group_name  = "DoNotDeleteGroup"
+    storage_account_name = "11donotdeletestorage1111"
+    container_name       = "tfstate"
     key                  = "yuviterraform.tfstate"
     # access_key           = "your-storage-account-access-key"
   }

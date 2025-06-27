@@ -48,8 +48,7 @@ module "network_interface_frontend" {
   subnet_name         = "frontendsubnet"
   vnet_name           = "yuvivnet001"
   resource_group_name = "yuvrajrg001"
-  azurerm_public_ip   = "frontendpip"
-
+  azurerm_public_ip   = module.public_ip.public_ip_id
 
 }
 
@@ -72,7 +71,7 @@ module "virtual_machine_frontend" {
   depends_on = [module.network_interface_frontend]
   source     = "../../Modules/virtual_machine"
 
-  virtual_machine_name  = "frontend_machine"
+  virtual_machine_name  = "frontendmachine"
   resource_group_name   = "yuvrajrg001"
   network_interface_ids = [module.network_interface_frontend.id]
 
@@ -83,7 +82,7 @@ module "virtual_machine_backend" {
   depends_on = [module.network_interface_backend]
   source     = "../../Modules/virtual_machine"
 
-  virtual_machine_name  = "backend_machine"
+  virtual_machine_name  = "backendmachine"
   resource_group_name   = "yuvrajrg001"
   network_interface_ids = [module.network_interface_backend.id]
 
