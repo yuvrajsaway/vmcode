@@ -4,8 +4,8 @@ resource "azurerm_linux_virtual_machine" "virtaul_machine" {
   resource_group_name             = data.azurerm_resource_group.resource_group.name
   location                        = data.azurerm_resource_group.resource_group.location
   size                            = "Standard_F2"
-  admin_username                  = "adminuser"
-  admin_password                  = "P@$$w0rd@123"
+  admin_username                  = var.username
+  admin_password                  = var.password
   disable_password_authentication = false
   network_interface_ids           = var.network_interface_ids
 

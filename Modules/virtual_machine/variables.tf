@@ -11,3 +11,10 @@ variable "network_interface_ids" {
   
 }
 
+variable "username" {
+  
+}
+
+variable "password" {
+  
+}
