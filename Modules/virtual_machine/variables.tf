@@ -11,10 +11,14 @@ variable "network_interface_ids" {
   
 }
 
-variable "username" {
+# variable "username" {
   
-}
+# }
 
-variable "password" {
+# variable "password" {
+  
+# }
+
+variable "keyvault" {
   
 }

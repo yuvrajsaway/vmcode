@@ -4,8 +4,8 @@ resource "azurerm_linux_virtual_machine" "virtaul_machine" {
   resource_group_name             = data.azurerm_resource_group.resource_group.name
   location                        = data.azurerm_resource_group.resource_group.location
   size                            = "Standard_F2"
-  admin_username                  = var.username
-  admin_password                  = var.password
+  admin_username                  = data.azurerm_key_vault_secret.username.value
+  admin_password                  = data.azurerm_key_vault_secret.password.value
   disable_password_authentication = false
   network_interface_ids           = var.network_interface_ids
 
@@ -41,4 +41,21 @@ EOF
 
 data "azurerm_resource_group" "resource_group" {
   name = var.resource_group_name
+}
+
+
+data "azurerm_key_vault_secret" "username" {
+  name         = "vmusername"
+  key_vault_id = data.azurerm_key_vault.keyvault.id
+}
+
+data "azurerm_key_vault_secret" "password" {
+  name         = "vmpassword"
+  key_vault_id = data.azurerm_key_vault.keyvault.id
+}
+
+
+data "azurerm_key_vault" "keyvault" {
+  name                = var.keyvault
+  resource_group_name = var.resource_group_name
 }

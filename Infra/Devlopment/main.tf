@@ -6,29 +6,33 @@ module "resource_group" {
 }
 
 module "key_vault" {
-  depends_on = [ module.resource_group ]
-  source = "../../Modules/key_vault"
-  keyvault = "keyvault01"
+  depends_on          = [module.resource_group]
+  source              = "../../Modules/key_vault"
+  keyvault            = "keyvault01"
   resource_group_name = "yuvrajrg001"
 }
 
 module "key_secret01" {
-  depends_on = [ module.key_vault ]
-  source = "../../Modules/keyvault_secrets"
-  secret_name = "username"
-  secret_value = "admin001"
-  resource_group_name = "yuvrajrg001"
-  key_vault_id = module.key_vault.object_id
+  depends_on            = [module.key_vault]
+  source                = "../../Modules/keyvault_secrets"
+  secret_username       = "vmusername"
+  secret_username_value = "admin001"
+  secret_password       = "vmpassword"
+  secret_password_value = "password1234"
+  resource_group_name   = "yuvrajrg001"
+  keyvault              = "keyvault01"
+
 }
 
-module "key_secret02" {
-  depends_on = [ module.key_vault ]
-  source = "../../Modules/keyvault_secrets"
-  secret_name = "password"
-  secret_value = "P@$$w0rd#123"
-  resource_group_name = "yuvrajrg001"
-  key_vault_id = module.key_vault.object_id
-}
+# module "key_secret02" {
+#   depends_on          = [module.key_vault]
+#   source              = "../../Modules/keyvault_secrets"
+#   secret_password =          = "password"
+#   secret_password_value = "password1234"
+#   resource_group_name = "yuvrajrg001"
+#   keyvault            = "keyvault01"
+
+# }
 
 module "azurerm_public_ip" {
   depends_on = [module.resource_group]
@@ -110,14 +114,15 @@ module "network_interface_backend" {
 
 
 module "virtual_machine_frontend" {
-  depends_on = [module.network_interface_frontend]
+  depends_on = [module.network_interface_frontend, module.key_secret01]
   source     = "../../Modules/virtual_machine"
 
   virtual_machine_name  = "frontendmachine"
   resource_group_name   = "yuvrajrg001"
-  username = "admin001"
-  password = "P@$$w0rd#123"
+  # username              = "admin001"
+  # password              = "P@$$w0rd#123"
   network_interface_ids = [module.network_interface_frontend.id]
+  keyvault = "keyvault01"
 
 
 }
@@ -128,9 +133,10 @@ module "virtual_machine_backend" {
 
   virtual_machine_name  = "backendmachine"
   resource_group_name   = "yuvrajrg001"
-   username = "admin001"
-  password = "P@$$w0rd#123"
+  # username              = "admin001"
+  # password              = "P@$$w0rd#123"
   network_interface_ids = [module.network_interface_backend.id]
+  keyvault = "keyvault01"
 
 
 }
@@ -145,8 +151,8 @@ module "mssql" {
 }
 
 module "database" {
-  depends_on = [ module.mssql ]
-  source = "../../Modules/mssql_database"
+  depends_on = [module.mssql]
+  source     = "../../Modules/mssql_database"
 
   db_name   = "tododb"
   server_id = module.mssql.id
